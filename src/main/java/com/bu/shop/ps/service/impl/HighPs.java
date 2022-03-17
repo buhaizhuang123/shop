@@ -52,8 +52,14 @@ public class HighPs implements InvocationHandler {
         sourceAsMap.forEach((k,v)-> System.out.println(k+":"+v));
     }
 
+    public String sayHello(Object[] args){
+        System.out.println(args[0]);
+        return args[0].toString();
+    }
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        sayHello(args);
         System.out.println("first");
         Object invoke = method.invoke(object, args);
         System.out.println("after");
@@ -63,6 +69,8 @@ public class HighPs implements InvocationHandler {
     public static void main(String[] args) {
         ProxyService proxyService = new ProxyServiceImpl();
         HighPs highPs = new HighPs(proxyService);
+        String[] str = {"123...."};
+        highPs.sayHello(str);
         ProxyService o =(ProxyService) Proxy.newProxyInstance(highPs.getClass().getClassLoader(),proxyService.getClass().getInterfaces(), highPs);
         System.out.println("o.getStr(\"123\") = " + o.getStr("123"));
     }
